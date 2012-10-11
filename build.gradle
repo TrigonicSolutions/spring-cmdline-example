@@ -9,24 +9,14 @@ dependencies {
     compile 'com.trigonic:spring-cmdline:0.3'
 }
 
-task exampleJar(type: Jar) {
-    baseName = 'example'
 
-    dependsOn classes, configurations.runtime
-
-    from sourceSets.main.output
-    from sourceSets.main.resources
-    from {
-        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+jar {
+    dependsOn configurations.runtime
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
 
     manifest {
         attributes 'Main-Class': 'com.trigonic.utils.spring.cmdline.example.Example'
     }
-}
-
-artifacts {
-    archives exampleJar
 }
 
 task wrapper(type: Wrapper) {
